@@ -1,0 +1,24 @@
+server:
+  port: ${ENV_PORT:9081}
+  servlet:
+    context-path: ${ENV_CTX_PATH:/sample-tilt-1}
+spring:
+  profiles:
+    active: ${ENV:dev}
+  config:
+    use-legacy-processing: true
+  data:
+    mongodb:
+      uri: ${ENV_MONGO_URI:mongodb://admin:admin@127.0.0.1/monitoring?authSource=admin}
+      auto-index-creation: true
+  application:
+    name: sample-tilt-1
+
+sample2:
+  host: http://localhost:9082/samples-tilt-2
+http:
+  timeout: ${ENV_HTTP_TIMEOUT:10}
+  debug: ${ENV_HTTP_DEBUG:true}
+
+
+

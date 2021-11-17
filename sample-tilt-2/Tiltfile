@@ -1,0 +1,42 @@
+# -*- mode: Python -*-
+repository_name = "sample-tilt-2"
+port = 9080
+debug_port = 5005
+application_class = 'br.com.sampletilt2.SampleTilt2ApplicationKt'
+project_name = 'monitoring-test'
+java_opts = '-Duser.timezone=America/Sao_Paulo -Dfile.encoding=UTF8 -Xms512m -Xmx1024m'
+debug = '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:' + str(debug_port)
+entrypoint_var = ['java', '-noverify', java_opts, '-cp', '.:./lib/*', application_class]
+debug_enable = False
+
+if debug_enable == True :
+    entrypoint_var = ['java', '-noverify', debug, java_opts, '-cp', '.:./lib/*', application_class]
+
+load('ext://restart_process', 'docker_build_with_restart')
+
+gradlew = "./gradlew"
+
+local_resource(
+  repository_name + '-compile',
+  gradlew + ' bootJar && ' +
+  'unzip -o build/libs/*.jar -d build/jar-staging && ' +
+  'rsync --inplace --checksum -r build/jar-staging/ build/jar',
+  deps=['src', 'build.gradle'],
+  labels= project_name + "-compile")
+
+
+docker_build_with_restart(
+  repository_name + '-image',
+  './build/jar',
+  entrypoint=entrypoint_var,
+  dockerfile='./.tilt/Dockerfile',
+  live_update=[
+    sync('./build/jar/BOOT-INF/lib', '/app/lib'),
+    sync('./build/jar/META-INF', '/app/META-INF'),
+    sync('./build/jar/BOOT-INF/classes', '/app'),
+  ],
+)
+
+k8s_yaml('.tilt/kub-tilt.yaml')
+k8s_resource(repository_name,
+             resource_deps=[repository_name +'-compile'], labels=project_name + "-pods")

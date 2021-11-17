@@ -1,0 +1,102 @@
+buildscript {
+    ext {
+        java_version = JavaVersion.VERSION_11
+        kotlin_version = '1.5.31'
+        resilience4j_version = '2.0.2'
+        spring_boot_version = '2.5.5'
+        spotless_version = '5.14.2'
+        spring_cloud_version = '2020.0.3'
+        mockk_version = '1.12.0'
+        swagger_version = '2.0.0'
+        git_hooks_version = '0.0.2'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://repo.gradle.org/gradle/libs-releases"
+        }
+    }
+}
+
+plugins {
+    id "idea"
+    id "java"
+    id "org.springframework.boot" version "$spring_boot_version"
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+    id "org.jetbrains.kotlin.plugin.spring" version "$kotlin_version"
+    id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.gradle.org/gradle/libs-releases"
+    }
+}
+
+group = "br.com.sample"
+version = "1.0.0"
+sourceCompatibility = java_version
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web:$spring_boot_version"
+    implementation "org.springframework.boot:spring-boot-starter-undertow:$spring_boot_version"
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb:$spring_boot_version"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:$spring_boot_version"
+    implementation "io.micrometer:micrometer-registry-prometheus"
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5'
+    implementation "org.apache.commons:commons-lang3:3.9"
+    implementation "org.apache.httpcomponents:httpclient:4.5.9"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'io.github.microutils:kotlin-logging:2.0.11'
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$spring_boot_version"
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test:$spring_boot_version") {
+        exclude group: "org.mockito', module: 'mockito-core"
+        exclude group: "org.junit.vintage', module: 'junit-vintage-engine"
+    }
+    testImplementation "io.mockk:mockk:1.10.5"
+    testImplementation "com.ninja-squad:springmockk:3.0.1"
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = java_version
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = java_version
+    }
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+    useJUnitPlatform()
+}
+
+task printVersion {
+    doLast {
+        println "Build version: $version"
+    }
+}
+
+task printProjName {
+    doLast {
+        println "name: ${project.name}"
+    }
+}
+
+jar {
+    enabled = false
+}

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-tilt-2
+  labels:
+    app: sample-tilt-2
+spec:
+  selector:
+    matchLabels:
+      app: sample-tilt-2
+  template:
+    metadata:
+      labels:
+        app: sample-tilt-2
+    spec:
+      hostNetwork: true
+      containers:
+        - name: sample-tilt-2
+          image: sample-tilt-2-image
+          env:
+            - name: ENV
+              value: dev
+            - name: JAVA_OPTS
+              value: >-
+                -Duser.timezone=America/Sao_Paulo -Dfile.encoding=UTF8 -Xms512m -Xmx512m
+

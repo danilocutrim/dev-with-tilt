@@ -1,0 +1,9 @@
+{
+  "Extensions": [
+    {
+      "Name": "restart_process",
+      "ExtensionRegistry": "https://github.com/tilt-dev/tilt-extensions",
+      "TimeFetched": "2021-11-16T23:23:17.022329454-03:00"
+    }
+  ]
+}

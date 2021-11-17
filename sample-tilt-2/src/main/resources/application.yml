@@ -1,0 +1,16 @@
+server:
+  port: ${ENV_PORT:9082}
+  servlet:
+    context-path: ${ENV_CTX_PATH:/sample-tilt-2}
+spring:
+  profiles:
+    active: ${ENV:dev}
+  config:
+    use-legacy-processing: true
+  data:
+    mongodb:
+      uri: ${ENV_MONGO_URI:mongodb://admin:admin@127.0.0.1/monitoring?authSource=admin}
+      auto-index-creation: true
+  application:
+    name: sample-tilt-2
+
