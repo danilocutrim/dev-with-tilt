@@ -3,7 +3,7 @@ repository_name = "sample-tilt-2"
 port = 9080
 debug_port = 5005
 application_class = 'br.com.sampletilt2.SampleTilt2ApplicationKt'
-project_name = 'monitoring-test'
+project_name = 'til-dev-samples'
 java_opts = '-Duser.timezone=America/Sao_Paulo -Dfile.encoding=UTF8 -Xms512m -Xmx1024m'
 debug = '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:' + str(debug_port)
 entrypoint_var = ['java', '-noverify', java_opts, '-cp', '.:./lib/*', application_class]
