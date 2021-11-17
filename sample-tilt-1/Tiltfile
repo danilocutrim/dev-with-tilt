@@ -7,7 +7,7 @@ project_name = 'monitoring-test'
 java_opts = '-Duser.timezone=America/Sao_Paulo -Dfile.encoding=UTF8 -Xms512m -Xmx1024m'
 debug = '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:' + str(debug_port)
 entrypoint_var = ['java', '-noverify', java_opts, '-cp', '.:./lib/*', application_class]
-debug_enable = True
+debug_enable = False
 
 if debug_enable == True :
     entrypoint_var = ['java', '-noverify', debug, java_opts, '-cp', '.:./lib/*', application_class]
