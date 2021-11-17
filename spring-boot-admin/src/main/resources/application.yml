@@ -1,0 +1,14 @@
+server:
+  port: ${ENV_PORT}
+spring:
+  profiles:
+    active: ${ENV}
+  config:
+    use-legacy-processing: true
+  boot:
+    admin:
+      context-path: ${ENV_CTX_PATH}
+  security:
+    user:
+      name: ${ENV_USER_NAME}
+      password: ${ENV_USER_PASSWORD}

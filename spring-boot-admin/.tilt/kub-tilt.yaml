@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sample-tilt-2
+  name: spring-boot-admin
   labels:
-    app: sample-tilt-2
+    app: spring-boot-admin
 spec:
   selector:
     matchLabels:
-      app: sample-tilt-2
+      app: spring-boot-admin
   template:
     metadata:
       labels:
-        app: sample-tilt-2
+        app: spring-boot-admin
     spec:
       hostNetwork: true
       containers:
-        - name: sample-tilt-2
-          image: sample-tilt-2-image
+        - name: spring-boot-admin
+          image: spring-boot-admin-image
           env:
             - name: ENV
               value: dev

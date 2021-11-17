@@ -23,4 +23,6 @@ spec:
             - name: JAVA_OPTS
               value: >-
                 -Duser.timezone=America/Sao_Paulo -Dfile.encoding=UTF8 -Xms512m -Xmx512m
+            - name: ENV_SBA_ACTIVE
+              value: 'true'
 

@@ -1,0 +1,15 @@
+server:
+  port: ${ENV_PORT:9080}
+spring:
+  profiles:
+    active: test
+  config:
+    use-legacy-processing: true
+  boot:
+    admin:
+      context-path: ${ENV_CTX_PATH:/sba}
+  security:
+    user:
+      name: ${ENV_USER_NAME:admin}
+      password: ${ENV_USER_PASSWORD:admin}
+

@@ -1,0 +1,68 @@
+buildscript {
+    ext {
+        javaVersion = JavaVersion.VERSION_11
+        artifactoryRepo = "http://10.236.2.126:8081/artifactory/libs-release-local"
+        springBootAdminVersion = "2.3.1"
+    }
+}
+
+plugins {
+    id "org.springframework.boot" version "2.4.2"
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+    id "java"
+    id "org.sonarqube" version "2.7"
+    id "jacoco"
+}
+
+group = "br.com.sample"
+version = "0.0.1-SNAPSHOT"
+sourceCompatibility = "11"
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    maven {
+        url "$artifactoryRepo"
+    }
+    mavenCentral()
+    maven {
+        url "https://repo.gradle.org/gradle/libs-releases"
+    }
+}
+
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-undertow"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "de.codecentric:spring-boot-admin-starter-server:2.2.3"
+    implementation "net.logstash.logback:logstash-logback-encoder:5.2"
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.security:spring-security-test"
+}
+
+configurations {
+    implementation.exclude module: "spring-boot-starter-tomcat"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "${project.name}"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

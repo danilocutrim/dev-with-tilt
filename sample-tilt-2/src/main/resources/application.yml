@@ -9,4 +9,23 @@ spring:
     use-legacy-processing: true
   application:
     name: sample-tilt-2
-
+  boot:
+    admin:
+      client:
+        url: ${ENV_SBA_BASE_URL:http://localhost:9080/sba}
+        username: admin
+        password: admin
+        enabled: ${ENV_SBA_ACTIVE:false}
+        instance:
+          name: ${spring.application.name}
+          prefer-ip: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - loggers
+  endpoint:
+    health:
+      show-details: always
