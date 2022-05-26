@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" debug="false">
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <springProperty scope="context" name="appName" source="spring.application.name"/>
+    <!-- Appender tos log tos console in a JSON format -->
+    <appender name="JSONOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>America/Sao_Paulo</timeZone>
+                </timestamp>
+                <context/>
+                <logLevel/>
+                <loggerName/>
+                <pattern>
+                    <pattern>
+                        {
+                        "severity": "%level",
+                        "service": "${appName:-}",
+                        "@version": "${project.version}",
+                        "trace": "%X{X-B3-TraceId:-}",
+                        "span": "%X{X-B3-SpanId:-}",
+                        "parent": "%X{X-B3-ParentSpanId:-}",
+                        "exportable": "%X{X-Span-Export:-}",
+                        "pid": "${PID:-}",
+                        "thread": "%thread",
+                        "class": "%logger{40}",
+                        "message": "%message"
+                        }
+                    </pattern>
+                </pattern>
+                <threadName/>
+                <message/>
+                <!-- log guid support -->
+                <mdc/>
+                <!-- StructuredArgument and Marker support -->
+                <arguments/>
+                <logstashMarkers/>
+                <stackTrace>
+                    <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                        <maxDepthPerThrowable>200</maxDepthPerThrowable>
+                        <maxLength>40960</maxLength>
+                        <shortenedClassNameLength>32</shortenedClassNameLength>
+                        <exclude>sun\.reflect\..*\.invoke.*</exclude>
+                        <exclude>net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
+                        <rootCauseFirst>true</rootCauseFirst>
+                    </throwableConverter>
+                </stackTrace>
+            </providers>
+        </encoder>
+    </appender>
+    <!-- Appender tos log tos console -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %-30(%date{ISO8601} [%thread]) %highlight(%-5level) %boldCyan(%logger{32}) - %X{X-B3-TraceId:-} - %X{X-B3-SpanId:-} - %X{X-B3-ParentSpanId:-} - %X{X-Span-Export:-} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+    <springProfile name="dev">
+        <logger name="br.com.test" level="DEBUG" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <!-- DEIXAR TRACE PARA LOGAR VALORES HIBERNATE -->
+        <logger name="org.hibernate.type" level="ERROR" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <!-- DEIXAR DEBUG PARA LOGAR VALORES HIBERNATE -->
+        <logger name="org.hibernate.SQL" level="ERROR" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+    </springProfile>
+    <springProfile name="!dev">
+        <logger name="br.com.test" level="INFO" additivity="false">
+            <appender-ref ref="JSONOUT"/>
+        </logger>
+    </springProfile>
+</configuration>
