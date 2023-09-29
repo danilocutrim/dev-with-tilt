@@ -120,3 +120,6 @@ microk8s kubectl -n kube-system describe secret $token
 ![dash](imgs/dash.png)
 
 
+#### Configurando CNI
+https://microk8s.io/docs/change-cidr
+microk8s kubectl apply -f /var/snap/microk8s/current/args/cni-network/cni.yaml
